@@ -91,13 +91,13 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _showImageSourceModal(BuildContext context) {
+  void _showImageSourceModal(BuildContext parentContext) {
     showModalBottomSheet(
-      context: context,
+      context: parentContext,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => SafeArea(
+      builder: (sheetContext) => SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
@@ -115,16 +115,16 @@ class HomeScreen extends StatelessWidget {
                 leading: const Icon(Icons.camera_alt, color: AppTheme.primaryColor),
                 title: const Text('カメラで撮影'),
                 onTap: () {
-                  Navigator.pop(context);
-                  _takePhoto(context);
+                  Navigator.pop(sheetContext);
+                  _takePhoto(parentContext);
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library, color: AppTheme.primaryColor),
                 title: const Text('ギャラリーから選択'),
                 onTap: () {
-                  Navigator.pop(context);
-                  _pickFromGallery(context);
+                  Navigator.pop(sheetContext);
+                  _pickFromGallery(parentContext);
                 },
               ),
             ],

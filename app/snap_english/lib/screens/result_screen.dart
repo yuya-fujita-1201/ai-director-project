@@ -1,11 +1,63 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../config/theme.dart';
+import '../models/phrase.dart';
+import '../services/ai_service.dart';
+import '../widgets/phrase_card.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatefulWidget {
   final String imagePath;
 
   const ResultScreen({super.key, required this.imagePath});
+
+  @override
+  State<ResultScreen> createState() => _ResultScreenState();
+}
+
+class _ResultScreenState extends State<ResultScreen> {
+  final AiService _aiService = AiService();
+
+  List<Phrase>? _phrases;
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _analyzImage();
+  }
+
+  Future<void> _analyzImage() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+      _phrases = null;
+    });
+
+    try {
+      final phrases = await _aiService.generatePhrases(widget.imagePath);
+      if (mounted) {
+        setState(() {
+          _phrases = phrases;
+          _isLoading = false;
+        });
+      }
+    } on AiServiceException catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.message;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = '予期しないエラーが発生しました。';
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,65 +69,36 @@ class ResultScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 撮影画像表示
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                margin: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.file(
-                    File(imagePath),
-                    fit: BoxFit.cover,
+            // 撮影画像表示（コンパクトに）
+            Container(
+              height: 200,
+              width: double.infinity,
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.file(
+                  File(widget.imagePath),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-            // AI分析中プレースホルダー（Day 2でAPIレスポンスに差し替え）
+            // フレーズ表示エリア
             Expanded(
-              flex: 2,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const CircularProgressIndicator(
-                      color: AppTheme.primaryColor,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'AI分析中...',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: AppTheme.textSecondary,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '英語フレーズを生成しています',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppTheme.textSecondary.withValues(alpha: 0.7),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _buildContent(),
             ),
             // もう一度撮影ボタン
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
               child: SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -90,6 +113,110 @@ class ResultScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildContent() {
+    // ローディング中
+    if (_isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircularProgressIndicator(
+              color: AppTheme.primaryColor,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'AI分析中...',
+              style: TextStyle(
+                fontSize: 18,
+                color: AppTheme.textSecondary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '英語フレーズを生成しています',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppTheme.textSecondary.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // エラー表示
+    if (_errorMessage != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: Colors.red.shade300,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: AppTheme.textSecondary,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 20),
+              OutlinedButton.icon(
+                onPressed: _analyzImage,
+                icon: const Icon(Icons.refresh),
+                label: const Text('リトライ'),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primaryColor,
+                  side: const BorderSide(color: AppTheme.primaryColor),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // フレーズカード表示
+    if (_phrases != null && _phrases!.isNotEmpty) {
+      return ListView.builder(
+        padding: const EdgeInsets.only(top: 4, bottom: 8),
+        itemCount: _phrases!.length,
+        itemBuilder: (context, index) {
+          return PhraseCard(
+            phrase: _phrases![index],
+            index: index,
+          );
+        },
+      );
+    }
+
+    // フレーズが空の場合
+    return const Center(
+      child: Text(
+        'フレーズを生成できませんでした。',
+        style: TextStyle(
+          fontSize: 15,
+          color: AppTheme.textSecondary,
         ),
       ),
     );
