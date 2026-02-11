@@ -14,8 +14,6 @@ class Phrase {
 
   /// JSONからPhraseを生成（APIが返す様々なキー名に対応）
   factory Phrase.fromJson(Map<String, dynamic> json) {
-    print('[Phrase.fromJson] keys: ${json.keys.toList()}, values: $json');
-
     // 英語フレーズ: 複数のキー名候補を試す
     final english = _findValue(json, [
       'english',

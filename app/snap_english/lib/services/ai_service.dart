@@ -102,9 +102,7 @@ class AiService {
   List<Phrase> _parseResponse(Map<String, dynamic> responseData) {
     try {
       final content = responseData['choices'][0]['message']['content'] as String;
-      print('[AiService] Raw API response content: $content');
       final jsonData = json.decode(content) as Map<String, dynamic>;
-      print('[AiService] Parsed JSON keys: ${jsonData.keys.toList()}');
 
       // "phrases" キーが無い場合、他のキーを探す
       List<dynamic> phrasesList;
@@ -116,22 +114,13 @@ class AiService {
           (e) => e.value is List,
           orElse: () => throw Exception('No list found in response'),
         );
-        print('[AiService] Using key "${listEntry.key}" instead of "phrases"');
         phrasesList = listEntry.value as List<dynamic>;
       }
 
-      final phrases = phrasesList
+      return phrasesList
           .map((p) => Phrase.fromJson(p as Map<String, dynamic>))
           .toList();
-
-      for (final p in phrases) {
-        print('[AiService] Phrase: "${p.english}" / "${p.japanese}" / ${p.difficulty}');
-      }
-
-      return phrases;
     } catch (e) {
-      print('[AiService] Parse error: $e');
-      print('[AiService] Response data: $responseData');
       throw AiServiceException('AIの応答を解析できませんでした。もう一度お試しください。');
     }
   }
