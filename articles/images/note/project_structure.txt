@@ -1,0 +1,20 @@
+/Users/yuyafujita/Projects/ai-director-project/.claude/worktrees/nervous-haibt/app/snap_english/lib/
+├── app.dart
+├── config
+│   ├── constants.dart
+│   └── theme.dart
+├── main.dart
+├── models
+│   ├── phrase.dart
+│   └── scan_result.dart
+├── screens
+│   ├── home_screen.dart
+│   └── result_screen.dart
+├── services
+│   ├── ai_service.dart
+│   └── camera_service.dart
+└── widgets
+    ├── camera_preview.dart
+    └── phrase_card.dart
+
+6 directories, 12 files
