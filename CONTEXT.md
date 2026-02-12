@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-12 JST
+# 最終更新: 2026-02-12 Day 3完了 + Day 4準備完了（Cowork）
 
 ---
 
@@ -78,8 +78,9 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 | # | タイトル | 有料/無料 | ステータス |
 |---|---|---|---|
 | ① | Claude Opus 4.6がリリースされたので、全部AIに任せて1週間でiOSアプリを作ってみることにした | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/n00a946fe68da |
-| ② | ターミナルって何？からスタートして、Claudeに聞いたら2時間で開発環境ができた | 無料 | 未着手 |
-| ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | 未着手 |
+| ② | ターミナルって何？からスタートして、Claudeに聞いたら2時間で開発環境ができた | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/ne17c13515413 |
+| ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **執筆完了**（articles/03_tool_guide.md）Note未投稿 |
+| ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | ✅ **初稿完了**（articles/04_app_working.md）Day 4部分は追記予定 |
 | ④ | App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間 | ¥500 | 未着手 |
 | ⑤ | 1週間チャレンジの全結果を公開する ― DL数・売上・Note記事の収益も | ¥980 | 未着手 |
 | 番外 | AIに聞きながらNoteアカウントを作って初投稿するまで ― 完全初心者ガイド | 無料 | 未着手 |
@@ -134,18 +135,16 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 12. X告知投稿は2/11朝7-8時に実施予定
 
 ### 未決定事項
-- アプリのデザインテーマ・カラー（現在はブルー系）
+- アプリのデザインテーマ・カラー（Day 5で調整予定）
 
-### Day 1-2で決定
-- AI API → OpenAI Vision（gpt-4o-mini）を採用
-- 状態管理 → flutter_riverpod
-- HTTP → dio
-- ローカルDB → sqflite
-
-### Day 3で決定
-- タブナビゲーション: BottomNavigationBar（撮影/履歴/お気に入り）
-- DB設計: scan_history + phrases テーブル（1対多リレーション）
-- 画像保存: アプリ内ドキュメントディレクトリにコピー
+### 決定済み追加事項
+13. AI APIはOpenAI Vision APIを採用（Day 2で実装完了）
+14. 記事②.5としてツール解説編を追加（シリーズ読者＋検索流入の両狙い）
+15. Note画像アップロード・X画像添付は手動で実施（自動化に制約あり）
+16. Day 3コードはCowork側で事前作成し、Claude Code CLIで統合する方式を採用
+17. 更新ファイルは `_updated.dart` として作成（既存ファイルとの競合回避）
+18. Note見出し画像はグリッド線なしのダークテック風テンプレートで統一（docs/header_image_template.md）
+19. Note画像アップロードは手動実施（VM↔Mac間のファイル転送制約のため）
 
 ---
 
@@ -156,38 +155,46 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 ```
 ai-director-project/
 ├── CONTEXT.md              ← このファイル
-├── CLAUDE.md               ✅ Claude Code設定
+├── README.md
 ├── docs/
 │   ├── project_plan.md     ✅ 配置済み
-│   ├── folder_structure_setup.md  ✅
-│   └── chrome_note_prompt.md  ✅
+│   ├── folder_structure_setup.md  ✅ 配置済み
+│   ├── chrome_note_prompt.md  ✅ 配置済み
+│   ├── app_spec.md         ✅ 作成済み
+│   ├── day1_dev_guide.md   ✅ 作成済み
+│   ├── day3_dev_guide.md   ✅ 作成済み
+│   ├── day4_dev_guide.md   ✅ 作成済み
+│   ├── header_image_template.md  ✅ 作成済み（見出し画像テンプレ仕様）
+│   ├── api_selection.md    （未作成）
+│   └── revenue_model.md    （未作成）
 ├── articles/
-│   ├── 01_planning.md      ✅ 公開済み
-│   └── 02〜05, extra       （未作成）
+│   ├── 01_planning.md      ✅ 配置済み（公開済み記事と同内容）
+│   ├── 02_setup.md         ✅ 構成案作成済み
+│   ├── 03_tool_guide.md    ✅ 執筆完了（ツール解説編）
+│   ├── 04〜05, extra       （未作成）
+│   └── images/             ✅ note/（7枚）x/（2枚）撮影済み
 ├── x_posts/
-│   ├── daily_posts.md      ✅ Day 0-3投稿文
+│   ├── daily_posts.md      ✅ Day 0-3投稿下書き
 │   └── buzz_posts.md
-├── logs/
-│   └── day3.md             ✅ Day 3作業ログ
-├── app/snap_english/       ✅ Flutterプロジェクト
-│   ├── lib/
-│   │   ├── main.dart
-│   │   ├── app.dart
-│   │   ├── config/         (constants.dart, theme.dart)
-│   │   ├── models/         (phrase.dart, scan_result.dart)
-│   │   ├── screens/        (main_screen, home_screen, result_screen, favorites_screen, history_screen)
-│   │   ├── services/       (ai_service, camera_service, database_service)
-│   │   └── widgets/        (phrase_card, camera_preview)
-│   └── pubspec.yaml
-├── assets/                 （アプリ素材）
-└── revenue/                （収益データ）
+│   ├── 04_app_working.md   ✅ 初稿完了（記事③ Day 3-4）
+├── assets/
+│   ├── header_day0.png     ✅ 見出し画像（記事①）
+│   ├── header_day1-2.png   ✅ 見出し画像（記事②）
+├── logs/                   ✅ day1-3作業ログ
+├── revenue/                （収益データ）
+└── app/snap_english/        ✅ Flutter プロジェクト（claude/nervous-haibtブランチ）
+    └── lib/
+        ├── services/database_service.dart  ✅ Day 3新規
+        ├── screens/main_screen.dart        ✅ Day 3新規
+        ├── screens/favorites_screen.dart   ✅ Day 3新規
+        ├── screens/history_screen.dart     ✅ Day 3新規
+        └── *_updated.dart                  ✅ Day 3更新版（統合待ち）
 ```
 
 ---
 
-## ✅ 完了タスク
+## ✅ 完了タスク（Day 0）
 
-### Day 0
 - [x] プロジェクト企画（コンセプト・ターゲット・収益モデル）
 - [x] アプリ企画選定（SnapEnglish）
 - [x] 1週間スケジュール策定
@@ -198,47 +205,101 @@ ai-director-project/
 - [x] サムネイル画像作成（HTML）
 - [x] Note記事①公開 → https://note.com/marumi_works/n/n00a946fe68da
 - [x] X告知投稿文を3パターン作成
+- [x] X告知投稿（Day 0告知）
 
-### Day 1
-- [x] Flutter環境構築 + プロジェクト作成
-- [x] カメラ/ギャラリー画像選択機能
-- [x] ホーム画面（撮影ボタン + 残り回数表示）
-- [x] 結果画面の基本レイアウト
+## ✅ 完了タスク（Day 1）
 
-### Day 2
-- [x] OpenAI Vision API連携（gpt-4o-mini）
-- [x] 画像→英語フレーズ3つ生成
-- [x] フレーズカード表示（難易度バッジ付き）
-- [x] エラーハンドリング（401, 429, タイムアウト等）
+- [x] アプリ設計書作成（docs/app_spec.md）
+- [x] Day 1開発手順書作成（docs/day1_dev_guide.md）
+- [x] Day 1作業ログ テンプレート作成（logs/day1.md）
+- [x] Day 1 X投稿文 下書き（x_posts/daily_posts.md に追記）
+- [x] 記事② 下書き構成作成（articles/02_setup.md）
+- [x] Flutter プロジェクト作成（app/snap_english/）
+- [x] 依存パッケージ追加（image_picker, riverpod, dio, sqflite 等）
+- [x] iOS権限設定（カメラ・フォトライブラリ）
+- [x] カメラ機能実装（image_picker）
+- [x] ホーム画面 + 結果画面（スタブ）実装
+- [x] flutter analyze / build / test すべてクリア
+- [x] iPhone 17シミュレータで動作確認
+- [x] Git コミット（9597d55）+ リモートプッシュ
 
-### Day 3
-- [x] SQLiteデータベース設計・実装（scan_history + phrases テーブル）
-- [x] 3タブナビゲーション（撮影/履歴/お気に入り）
-- [x] お気に入り機能（ハートアニメーション + スワイプ削除 + 元に戻す）
-- [x] 撮影履歴一覧（サムネイル + フレーズプレビュー + 日時）
-- [x] 結果画面のDB保存連携
-- [x] iOSビルド成功確認
-- [x] X投稿下書き4パターン作成
-- [x] 作業ログ記録
+## ✅ 完了タスク（Day 2）
+
+- [x] Day 2開発手順書作成（docs/day2_dev_guide.md）
+- [x] OpenAI APIキー取得（SnapEnglishキー、Coworkブラウザ経由）
+- [x] AI Service実装（lib/services/ai_service.dart）
+- [x] Phraseモデル更新（fromJson/toJson + フォールバック）
+- [x] 結果画面更新（フレーズカード + 難易度バッジ）
+- [x] 画像→API→フレーズ表示のフルフロー完成
+- [x] JSONパースのバグ修正（キー名フォールバック対応）
+- [x] 渓流画像でフレーズ生成の動作確認
+- [x] Git コミット（91345e2）+ リモートプッシュ（claude/nervous-haibt）
+- [x] Day 1 X投稿 下書き保存済み（Xアプリ内Drafts）
+
+## ✅ 完了タスク（Day 2 後半：コンテンツ制作）
+
+- [x] 記事② 本文執筆（articles/02_setup.md 4,041文字）
+- [x] 記事② Note公開（https://note.com/marumi_works/n/ne17c13515413）2日連続投稿達成
+- [x] X Day 1投稿 下書き保存（Claude in Chrome）
+- [x] X Day 2投稿 下書き保存（Claude in Chrome）
+- [x] シミュレータスクショ9枚撮影（Claude Code CLI）+ git push（4be0b45）
+- [x] 記事③ ツール解説編 執筆（articles/03_tool_guide.md）
+- [x] 記事③用スクショ撮影指示 作成（docs/screenshot_guide_article3.md）
+- [x] 記事ネタメモ作成（docs/article_ideas_memo.md）
+- [x] 作業ログ更新
+
+## ✅ 完了タスク（Day 3：UI仕上げ + お気に入り保存 ― Coworkコード作成）
+
+- [x] Day 3開発手順書作成（docs/day3_dev_guide.md）
+- [x] SQLiteデータベースサービス実装（lib/services/database_service.dart）
+- [x] タブバーナビゲーション実装（lib/screens/main_screen.dart）
+- [x] お気に入り画面実装（lib/screens/favorites_screen.dart）
+- [x] 撮影履歴画面実装（lib/screens/history_screen.dart）
+- [x] Phraseモデル拡張（lib/models/phrase_updated.dart ← DB対応）
+- [x] ScanResultモデル拡張（lib/models/scan_result_updated.dart）
+- [x] 結果画面更新（lib/screens/result_screen_updated.dart ← DB保存対応）
+- [x] フレーズカード更新（lib/widgets/phrase_card_updated.dart ← お気に入りアニメーション）
+- [x] App更新（lib/app_updated.dart ← MainScreen対応）
+- [x] Day 3 X投稿 下書き（x_posts/daily_posts.md に追記）
+- [x] Day 3作業ログ記録（logs/day3.md）
+- [x] CONTEXT.md更新
 
 ---
 
 ## 🔜 次のアクション（優先順）
 
-### Day 4: 課金実装 + 回数制限
-1. RevenueCat SDK導入・設定
-2. サブスクリプション商品設定（月額380円）
-3. 課金画面UI作成（ペイウォール）
-4. 1日3回の回数制限ロジック実装
-5. 有料ユーザー判定によるロック解除
-6. 作業ログを logs/day4.md に記録
-7. X投稿（Day 4完了）
+### 即時（Claude Code CLIで実施）
+1. **Day 3コードの統合**
+   - `_updated.dart` ファイルで既存ファイルを置き換え
+   - `flutter analyze` → `flutter build ios --simulator` → 動作確認
+   - スクリーンショット撮影（タブバー、お気に入り、履歴画面）
+   - Git コミット + プッシュ
+2. **Day 4コードの実装**（docs/day4_dev_guide.md 参照）
+   - RevenueCat + purchases_flutter セットアップ
+   - PurchaseService / UsageService 実装
+   - 1日3回の使用制限 + プレミアム判定
+   - 課金画面UI（Paywall）
+   - ホーム画面に残り回数表示
+   - Git コミット + プッシュ
 
-### 手動タスク
-- [ ] 記事②.5用のスクショ撮影 → Note公開
-- [ ] X投稿（Day 1-3のDraftsからスクショ添付）
+### 手動タスク（Yuya実施）
+3. **見出し画像アップロード**
+   - 記事①: `assets/header_day0.png` をNoteで設定
+   - 記事②: `assets/header_day1-2.png` をNoteで設定
+4. **App Store Connect**: サブスクリプション商品を作成（snap_english_monthly_380、¥380/月）
+5. **RevenueCat**: プロジェクト作成 + iOS設定 + APIキー取得
+6. **記事②.5用スクショ撮影**（デスクトップアプリ画面。手動 Cmd+Shift+4）
+7. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
+8. **記事②.5 Note公開**（スクショ挿入後）
+
+### 記事作業（Cowork）
+9. **記事③ Day 4部分を追記**（articles/04_app_working.md に課金実装パート追加）
+10. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
+
+### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記
 - [ ] 番外編（Noteの始め方ガイド）下書き作成
+- [ ] 番外編（AIにNote投稿を自動化させてみた）※docs/article_ideas_memo.md 参照
 
 ---
 
