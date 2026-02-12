@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-11 01:50 JST
+# 最終更新: 2026-02-12 JST
 
 ---
 
@@ -134,8 +134,18 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 12. X告知投稿は2/11朝7-8時に実施予定
 
 ### 未決定事項
-- AI APIの選定（Claude Vision vs OpenAI Vision）
-- アプリのデザインテーマ・カラー
+- アプリのデザインテーマ・カラー（現在はブルー系）
+
+### Day 1-2で決定
+- AI API → OpenAI Vision（gpt-4o-mini）を採用
+- 状態管理 → flutter_riverpod
+- HTTP → dio
+- ローカルDB → sqflite
+
+### Day 3で決定
+- タブナビゲーション: BottomNavigationBar（撮影/履歴/お気に入り）
+- DB設計: scan_history + phrases テーブル（1対多リレーション）
+- 画像保存: アプリ内ドキュメントディレクトリにコピー
 
 ---
 
@@ -146,31 +156,38 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 ```
 ai-director-project/
 ├── CONTEXT.md              ← このファイル
-├── README.md
+├── CLAUDE.md               ✅ Claude Code設定
 ├── docs/
 │   ├── project_plan.md     ✅ 配置済み
-│   ├── folder_structure_setup.md  ✅ 配置済み
-│   ├── chrome_note_prompt.md  ✅ 配置済み
-│   ├── app_spec.md         （未作成）
-│   ├── api_selection.md    （未作成）
-│   └── revenue_model.md    （未作成）
+│   ├── folder_structure_setup.md  ✅
+│   └── chrome_note_prompt.md  ✅
 ├── articles/
-│   ├── 01_planning.md      ✅ 配置済み（公開済み記事と同内容）
-│   ├── 02〜05, extra       （未作成）
-│   └── images/             （スクショ格納先）
+│   ├── 01_planning.md      ✅ 公開済み
+│   └── 02〜05, extra       （未作成）
 ├── x_posts/
-│   ├── daily_posts.md
+│   ├── daily_posts.md      ✅ Day 0-3投稿文
 │   └── buzz_posts.md
+├── logs/
+│   └── day3.md             ✅ Day 3作業ログ
+├── app/snap_english/       ✅ Flutterプロジェクト
+│   ├── lib/
+│   │   ├── main.dart
+│   │   ├── app.dart
+│   │   ├── config/         (constants.dart, theme.dart)
+│   │   ├── models/         (phrase.dart, scan_result.dart)
+│   │   ├── screens/        (main_screen, home_screen, result_screen, favorites_screen, history_screen)
+│   │   ├── services/       (ai_service, camera_service, database_service)
+│   │   └── widgets/        (phrase_card, camera_preview)
+│   └── pubspec.yaml
 ├── assets/                 （アプリ素材）
-├── logs/                   （Day別作業ログ）
-├── revenue/                （収益データ）
-└── app/                    （Day 1にFlutterプロジェクト生成）
+└── revenue/                （収益データ）
 ```
 
 ---
 
-## ✅ 完了タスク（Day 0）
+## ✅ 完了タスク
 
+### Day 0
 - [x] プロジェクト企画（コンセプト・ターゲット・収益モデル）
 - [x] アプリ企画選定（SnapEnglish）
 - [x] 1週間スケジュール策定
@@ -182,21 +199,45 @@ ai-director-project/
 - [x] Note記事①公開 → https://note.com/marumi_works/n/n00a946fe68da
 - [x] X告知投稿文を3パターン作成
 
+### Day 1
+- [x] Flutter環境構築 + プロジェクト作成
+- [x] カメラ/ギャラリー画像選択機能
+- [x] ホーム画面（撮影ボタン + 残り回数表示）
+- [x] 結果画面の基本レイアウト
+
+### Day 2
+- [x] OpenAI Vision API連携（gpt-4o-mini）
+- [x] 画像→英語フレーズ3つ生成
+- [x] フレーズカード表示（難易度バッジ付き）
+- [x] エラーハンドリング（401, 429, タイムアウト等）
+
+### Day 3
+- [x] SQLiteデータベース設計・実装（scan_history + phrases テーブル）
+- [x] 3タブナビゲーション（撮影/履歴/お気に入り）
+- [x] お気に入り機能（ハートアニメーション + スワイプ削除 + 元に戻す）
+- [x] 撮影履歴一覧（サムネイル + フレーズプレビュー + 日時）
+- [x] 結果画面のDB保存連携
+- [x] iOSビルド成功確認
+- [x] X投稿下書き4パターン作成
+- [x] 作業ログ記録
+
 ---
 
 ## 🔜 次のアクション（優先順）
 
-### 即時（2/11 朝）
-1. **Xで告知投稿**（朝7-8時）→ x_posts/daily_posts.md に投稿文あり
+### Day 4: 課金実装 + 回数制限
+1. RevenueCat SDK導入・設定
+2. サブスクリプション商品設定（月額380円）
+3. 課金画面UI作成（ペイウォール）
+4. 1日3回の回数制限ロジック実装
+5. 有料ユーザー判定によるロック解除
+6. 作業ログを logs/day4.md に記録
+7. X投稿（Day 4完了）
 
-### Day 1（2/11 or 2/12）
-2. Flutter環境構築 + プロジェクト作成（Claude Code CLI）
-3. カメラ機能の実装
-4. 作業ログを logs/day1.md に記録
-5. Xで「Day 1完了」投稿
-
-### 後日TODO
-- [ ] 記事①にClaude会話スクショを1-2枚追記（企画が出てきた瞬間のスクショ等）
+### 手動タスク
+- [ ] 記事②.5用のスクショ撮影 → Note公開
+- [ ] X投稿（Day 1-3のDraftsからスクショ添付）
+- [ ] 記事①にClaude会話スクショを1-2枚追記
 - [ ] 番外編（Noteの始め方ガイド）下書き作成
 
 ---

@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import '../config/theme.dart';
 import '../models/phrase.dart';
 import '../services/ai_service.dart';
+import '../services/database_service.dart';
 import '../widgets/phrase_card.dart';
 
 class ResultScreen extends StatefulWidget {
   final String imagePath;
+  final List<Phrase>? preloadedPhrases; // 履歴から開いた場合
 
-  const ResultScreen({super.key, required this.imagePath});
+  const ResultScreen({
+    super.key,
+    required this.imagePath,
+    this.preloadedPhrases,
+  });
 
   @override
   State<ResultScreen> createState() => _ResultScreenState();
@@ -16,6 +22,7 @@ class ResultScreen extends StatefulWidget {
 
 class _ResultScreenState extends State<ResultScreen> {
   final AiService _aiService = AiService();
+  final DatabaseService _db = DatabaseService.instance;
 
   List<Phrase>? _phrases;
   bool _isLoading = true;
@@ -24,10 +31,16 @@ class _ResultScreenState extends State<ResultScreen> {
   @override
   void initState() {
     super.initState();
-    _analyzImage();
+    if (widget.preloadedPhrases != null) {
+      // 履歴から開いた場合はDB済みフレーズを表示
+      _phrases = widget.preloadedPhrases;
+      _isLoading = false;
+    } else {
+      _analyzeImage();
+    }
   }
 
-  Future<void> _analyzImage() async {
+  Future<void> _analyzeImage() async {
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -41,6 +54,8 @@ class _ResultScreenState extends State<ResultScreen> {
           _phrases = phrases;
           _isLoading = false;
         });
+        // DB保存
+        await _saveToDB(phrases);
       }
     } on AiServiceException catch (e) {
       if (mounted) {
@@ -57,6 +72,32 @@ class _ResultScreenState extends State<ResultScreen> {
         });
       }
     }
+  }
+
+  Future<void> _saveToDB(List<Phrase> phrases) async {
+    try {
+      final scanId = await _db.saveScanResult(widget.imagePath, phrases);
+      // DB保存後、IDを持つフレーズで更新
+      final history = await _db.getAllScanHistory();
+      final saved = history.firstWhere(
+        (h) => h.id == scanId,
+        orElse: () => history.first,
+      );
+      if (mounted) {
+        setState(() {
+          _phrases = saved.phrases;
+        });
+      }
+    } catch (_) {
+      // DB保存失敗は無視（表示は継続）
+    }
+  }
+
+  void _onFavoriteToggled(int index, bool isFavorite) {
+    if (_phrases == null) return;
+    setState(() {
+      _phrases![index] = _phrases![index].copyWith(isFavorite: isFavorite);
+    });
   }
 
   @override
@@ -175,7 +216,7 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
               const SizedBox(height: 20),
               OutlinedButton.icon(
-                onPressed: _analyzImage,
+                onPressed: _analyzeImage,
                 icon: const Icon(Icons.refresh),
                 label: const Text('リトライ'),
                 style: OutlinedButton.styleFrom(
@@ -205,6 +246,7 @@ class _ResultScreenState extends State<ResultScreen> {
           return PhraseCard(
             phrase: _phrases![index],
             index: index,
+            onFavoriteToggled: (isFavorite) => _onFavoriteToggled(index, isFavorite),
           );
         },
       );

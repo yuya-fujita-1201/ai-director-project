@@ -1,16 +1,32 @@
-/// 英語フレーズモデル
+/// 英語フレーズモデル（Day 3: id, isFavorite追加）
 class Phrase {
+  final int? id; // DB上のID（未保存時はnull）
   final String english;
   final String japanese;
   final String difficulty; // beginner / intermediate / advanced
+  final bool isFavorite;
   final DateTime createdAt;
 
   Phrase({
+    this.id,
     required this.english,
     required this.japanese,
     required this.difficulty,
+    this.isFavorite = false,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
+
+  /// お気に入り状態を変更したコピーを返す
+  Phrase copyWith({bool? isFavorite, int? id}) {
+    return Phrase(
+      id: id ?? this.id,
+      english: english,
+      japanese: japanese,
+      difficulty: difficulty,
+      isFavorite: isFavorite ?? this.isFavorite,
+      createdAt: createdAt,
+    );
+  }
 
   /// JSONからPhraseを生成（APIが返す様々なキー名に対応）
   factory Phrase.fromJson(Map<String, dynamic> json) {
