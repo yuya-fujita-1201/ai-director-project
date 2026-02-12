@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-12 Day 3完了 + Day 4準備完了（Cowork）
+# 最終更新: 2026-02-12 Day 3完了 + 記事②.5公開済み + Day 4準備完了（Cowork）
 
 ---
 
@@ -79,7 +79,7 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 |---|---|---|---|
 | ① | Claude Opus 4.6がリリースされたので、全部AIに任せて1週間でiOSアプリを作ってみることにした | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/n00a946fe68da |
 | ② | ターミナルって何？からスタートして、Claudeに聞いたら2時間で開発環境ができた | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/ne17c13515413 |
-| ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **執筆完了**（articles/03_tool_guide.md）Note未投稿 |
+| ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **公開済み**（articles/03_tool_guide.md）スクショ後日追加予定 |
 | ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | ✅ **初稿完了**（articles/04_app_working.md）Day 4部分は追記予定 |
 | ④ | App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間 | ¥500 | 未着手 |
 | ⑤ | 1週間チャレンジの全結果を公開する ― DL数・売上・Note記事の収益も | ¥980 | 未着手 |
@@ -142,9 +142,11 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 14. 記事②.5としてツール解説編を追加（シリーズ読者＋検索流入の両狙い）
 15. Note画像アップロード・X画像添付は手動で実施（自動化に制約あり）
 16. Day 3コードはCowork側で事前作成し、Claude Code CLIで統合する方式を採用
-17. 更新ファイルは `_updated.dart` として作成（既存ファイルとの競合回避）
+17. 更新ファイルは `_updated.dart` として作成（既存ファイルとの競合回避）→ Day 3マージで統合完了・削除済み
 18. Note見出し画像はグリッド線なしのダークテック風テンプレートで統一（docs/header_image_template.md）
 19. Note画像アップロードは手動実施（VM↔Mac間のファイル転送制約のため）
+20. Gitブランチ整理完了: task/*, nervous-haibt, distracted-roentgen → mainに統合・削除（2026-02-12）
+21. 記事②.5はスクショなしで先行公開（後日追加予定、撮影指示はdocs/screenshot_guide_article3.md）
 
 ---
 
@@ -180,15 +182,15 @@ ai-director-project/
 ├── assets/
 │   ├── header_day0.png     ✅ 見出し画像（記事①）
 │   ├── header_day1-2.png   ✅ 見出し画像（記事②）
+│   ├── header_day2-5.png   ✅ 見出し画像（記事②.5）
 ├── logs/                   ✅ day1-3作業ログ
 ├── revenue/                （収益データ）
-└── app/snap_english/        ✅ Flutter プロジェクト（claude/nervous-haibtブランチ）
+└── app/snap_english/        ✅ Flutter プロジェクト（mainブランチに統合済み）
     └── lib/
         ├── services/database_service.dart  ✅ Day 3新規
         ├── screens/main_screen.dart        ✅ Day 3新規
         ├── screens/favorites_screen.dart   ✅ Day 3新規
-        ├── screens/history_screen.dart     ✅ Day 3新規
-        └── *_updated.dart                  ✅ Day 3更新版（統合待ち）
+        └── screens/history_screen.dart     ✅ Day 3新規
 ```
 
 ---
@@ -268,13 +270,9 @@ ai-director-project/
 
 ## 🔜 次のアクション（優先順）
 
-### 即時（Claude Code CLIで実施）
-1. **Day 3コードの統合**
-   - `_updated.dart` ファイルで既存ファイルを置き換え
-   - `flutter analyze` → `flutter build ios --simulator` → 動作確認
-   - スクリーンショット撮影（タブバー、お気に入り、履歴画面）
-   - Git コミット + プッシュ
-2. **Day 4コードの実装**（docs/day4_dev_guide.md 参照）
+### Day 4実装（Claude Code CLIで実施）
+1. **Day 4コードの実装**（docs/day4_dev_guide.md 参照）
+   - `flutter analyze` でDay 3統合後のビルド確認
    - RevenueCat + purchases_flutter セットアップ
    - PurchaseService / UsageService 実装
    - 1日3回の使用制限 + プレミアム判定
@@ -283,18 +281,18 @@ ai-director-project/
    - Git コミット + プッシュ
 
 ### 手動タスク（Yuya実施）
-3. **見出し画像アップロード**
+2. **見出し画像アップロード**
    - 記事①: `assets/header_day0.png` をNoteで設定
    - 記事②: `assets/header_day1-2.png` をNoteで設定
-4. **App Store Connect**: サブスクリプション商品を作成（snap_english_monthly_380、¥380/月）
-5. **RevenueCat**: プロジェクト作成 + iOS設定 + APIキー取得
-6. **記事②.5用スクショ撮影**（デスクトップアプリ画面。手動 Cmd+Shift+4）
-7. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
-8. **記事②.5 Note公開**（スクショ挿入後）
+   - 記事②.5: `assets/header_day2-5.png` をNoteで設定
+3. **App Store Connect**: サブスクリプション商品を作成（snap_english_monthly_380、¥380/月）
+4. **RevenueCat**: プロジェクト作成 + iOS設定 + APIキー取得
+5. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
+6. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
 
 ### 記事作業（Cowork）
-9. **記事③ Day 4部分を追記**（articles/04_app_working.md に課金実装パート追加）
-10. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
+7. **記事③を完成させる**（articles/04_app_working.md をDay 4実装後に追記・仕上げ）
+8. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
 
 ### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記
