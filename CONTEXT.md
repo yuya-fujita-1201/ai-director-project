@@ -40,7 +40,7 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 
 ### 収益モデル
 - 無料：1日3回まで
-- 有料（月額380円）：無制限 + お気に入り保存
+- 有料（月額400円）：無制限 + お気に入り保存（当初380円予定→Apple標準価格帯に合わせ400円）
 
 ### 技術スタック
 - Flutter/Dart
@@ -80,7 +80,7 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 | ① | Claude Opus 4.6がリリースされたので、全部AIに任せて1週間でiOSアプリを作ってみることにした | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/n00a946fe68da |
 | ② | ターミナルって何？からスタートして、Claudeに聞いたら2時間で開発環境ができた | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/ne17c13515413 |
 | ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **公開済み**（articles/03_tool_guide.md）スクショ後日追加予定 |
-| ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | ✅ **初稿完了**（articles/04_app_working.md）Day 4部分は追記予定 |
+| ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/nd865836ad26e |
 | ④ | App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間 | ¥500 | 未着手 |
 | ⑤ | 1週間チャレンジの全結果を公開する ― DL数・売上・Note記事の収益も | ¥980 | 未着手 |
 | 番外 | AIに聞きながらNoteアカウントを作って初投稿するまで ― 完全初心者ガイド | 無料 | 未着手 |
@@ -183,6 +183,8 @@ ai-director-project/
 │   ├── header_day0.png     ✅ 見出し画像（記事①）
 │   ├── header_day1-2.png   ✅ 見出し画像（記事②）
 │   ├── header_day2-5.png   ✅ 見出し画像（記事②.5）
+│   ├── header_day3-4_v3.png ✅ 見出し画像（記事③ v3 中央フォーカス）
+│   ├── header_magazine.png ✅ マガジン見出し画像
 ├── logs/                   ✅ day1-3作業ログ
 ├── revenue/                （収益データ）
 └── app/snap_english/        ✅ Flutter プロジェクト（mainブランチに統合済み）
@@ -278,6 +280,36 @@ ai-director-project/
 - [x] Day 4作業ログ記録（logs/day4.md）
 - [x] CONTEXT.md / CLAUDE.md更新
 
+## ✅ 完了タスク（Day 4 後半：RevenueCat & App Store Connect 設定 ― Coworkブラウザ操作）
+
+- [x] RevenueCat: プロジェクト「SnapEnglish」作成
+- [x] RevenueCat: Entitlement「premium」作成
+- [x] RevenueCat: Offering「default」+ Package「Monthly ($rc_monthly)」作成
+- [x] RevenueCat: テストAPIキー取得（test_VKTpEiMZTHJslwzfWhhdFxkmXTf）
+- [x] App Store Connect: In-App Purchase P8キー生成（P7PDD4P69G）
+- [x] P8キーをRevenueCatにアップロード
+- [x] Apple Developer: Bundle ID登録（com.marumiworks.snapEnglish）
+- [x] App Store Connect: アプリ「SnapEnglish AI」登録（ID: 6759194623）
+- [x] App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥400/月）
+- [x] App Store Connect: 日本語ローカリゼーション追加（プレミアムプラン/無制限スキャン＆フレーズ生成）
+- [x] RevenueCat: Product Catalogに商品追加 + Entitlement紐付け + Offering紐付け
+- [x] 設定値をlogs/day4.md・CLAUDE.md・CONTEXT.mdに記録
+
+### ⚙️ RevenueCat & App Store Connect 設定値
+| 項目 | 値 |
+|---|---|
+| RevenueCat テスト APIキー | `test_VKTpEiMZTHJslwzfWhhdFxkmXTf` |
+| Product ID | `snap_english_monthly_380` |
+| Entitlement | `premium` |
+| 価格 | ¥400/月（USD $1.99）※¥380はApple標準価格帯外のため変更 |
+| App Store Connect App ID | `6759194623` |
+| App Store名 | SnapEnglish AI |
+| Bundle ID | `com.marumiworks.snapEnglish` |
+| SKU | `snap_english` |
+| Team ID | `5CMYP437MX` |
+| P8 Key ID | `P7PDD4P69G` |
+| Issuer ID | `e359cd97-a6d4-4ef9-bcb3-24336fda0e74` |
+  
 ## ✅ 完了タスク（Day 5：デザイン調整 + オンボーディング ― Claude Code CLI実装）
 
 - [x] テーマ・カラーをティール系（#0097A7）に統一（lib/config/theme.dart 全面刷新）
@@ -304,11 +336,31 @@ ai-director-project/
    - キーワード設定
 
 ### 手動タスク（Yuya実施）
-2. **RevenueCat設定**（Day 4で実装したコードを動かすために必要）
-   - App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥400/月）
-   - RevenueCat: プロジェクト作成 + iOS設定 + APIキー取得
+2. **残りの手動設定**
    - Xcode: In-App Purchaseケイパビリティ有効化
    - 利用規約・プライバシーポリシーのURL用意
+3. ~~**見出し画像アップロード**~~ → ✅ 全記事完了（2026-02-15）
+4. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
+5. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
+
+### 記事・マガジン作業（Cowork）
+6. ~~**記事③を完成させる**~~ → ✅ Day 4追記済み・Note投稿済み（2026-02-14 23:54）
+   - URL: https://note.com/marumi_works/n/nd865836ad26e
+7. ~~**マガジン整理**~~ → ✅ 完了（2026-02-15）
+   - 記事③を「はじめてのAIツール入門シリーズ」から削除
+   - 新マガジン「AI監督プロジェクト ― 1週間アプリ開発記」作成
+   - URL: https://note.com/marumi_works/m/mee0723eb1d8c
+   - 全4記事（Day 0, Day 1-2, Extra, Day 3-4）を登録済み
+8. ~~**見出し画像をNoteで設定**~~ → ✅ 全記事完了（2026-02-15）
+   - 記事①: `assets/header_day0.png` ✅ 設定済み（手動）
+   - 記事②: `assets/header_day1-2.png` ✅ 設定済み（手動）
+   - 記事②.5: `assets/header_day2-5.png` ✅ 設定済み（手動）
+   - 記事③: `assets/header_day3-4_v3.png` ✅ 設定済み（2026-02-15 Chrome拡張経由、v3で中央フォーカス・大テキストに改善）
+9. ~~**マガジン見出し画像を設定**~~ → ✅ 完了（2026-02-15）
+   - `assets/header_magazine.png` 生成（Pillow、1280x670px）
+   - Chrome拡張経由でアップロード・保存済み
+   - マガジン編集ページではfileInput.click()が必要（label.click()では拡張のインターセプトが効かない）
+  
 
 ### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記

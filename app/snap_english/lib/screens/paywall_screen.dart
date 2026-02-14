@@ -356,7 +356,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
   Widget _buildPurchaseCard() {
     final monthlyPackage = _offerings?.current?.monthly;
-    final priceString = monthlyPackage?.storeProduct.priceString ?? '¥380';
+    final priceString = monthlyPackage?.storeProduct.priceString ?? '¥400';
 
     return Container(
       width: double.infinity,
