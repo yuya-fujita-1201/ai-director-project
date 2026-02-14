@@ -13,25 +13,35 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+class _HomeScreenState extends State<HomeScreen>
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   int _remainingScans = AppConstants.dailyFreeLimit;
   bool _isPremium = false;
   bool _isLoading = true;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 2000),
+      vsync: this,
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.08).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
     _refreshUsageInfo();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _pulseController.dispose();
     super.dispose();
   }
 
-  /// アプリがフォアグラウンドに戻ったとき回数を再取得
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -57,11 +67,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          AppConstants.appName,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        title: const Text(AppConstants.appName),
         actions: [
           if (!_isPremium)
             IconButton(
@@ -75,45 +81,60 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         child: Column(
           children: [
             const Spacer(flex: 2),
-            // 撮影ボタン
+            // 撮影ボタン（パルスアニメーション付き）
             Center(
               child: GestureDetector(
                 onTap: () => _handleScanTap(),
-                child: Container(
-                  width: 160,
-                  height: 160,
-                  decoration: BoxDecoration(
-                    color: _canScan
-                        ? AppTheme.primaryColor
-                        : Colors.grey.shade400,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: (_canScan
-                                ? AppTheme.primaryColor
-                                : Colors.grey)
-                            .withValues(alpha: 0.4),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    _canScan ? Icons.camera_alt : Icons.lock,
-                    size: 64,
-                    color: Colors.white,
+                child: AnimatedBuilder(
+                  animation: _pulseAnimation,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _canScan ? _pulseAnimation.value : 1.0,
+                      child: child,
+                    );
+                  },
+                  child: Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      gradient: _canScan
+                          ? const LinearGradient(
+                              colors: [AppTheme.primaryColor, AppTheme.accent],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            )
+                          : null,
+                      color: _canScan ? null : Colors.grey.shade400,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: (_canScan
+                                  ? AppTheme.primaryColor
+                                  : Colors.grey)
+                              .withValues(alpha: 0.35),
+                          blurRadius: 24,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      _canScan ? Icons.camera_alt_rounded : Icons.lock_rounded,
+                      size: 64,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 24),
-            // メッセージ（制限到達かどうかで変わる）
+            // メッセージ
             if (_canScan)
-              const Text(
+              Text(
                 '撮影して英語フレーズを学ぼう',
                 style: TextStyle(
                   fontSize: 16,
                   color: AppTheme.textSecondary,
+                  fontWeight: FontWeight.w500,
                 ),
               )
             else
@@ -133,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     icon: const Icon(Icons.star_rounded, size: 20),
                     label: const Text('プレミアムにアップグレード'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.amber.shade700,
+                      backgroundColor: AppTheme.warning,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
@@ -142,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     '明日また3回使えます',
                     style: TextStyle(
                       fontSize: 13,
@@ -161,10 +182,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// 撮影可能かどうか
   bool get _canScan => _isPremium || _remainingScans > 0;
 
-  /// 残り回数表示ウィジェット
   Widget _buildUsageIndicator() {
     if (_isLoading) {
       return const SizedBox(
@@ -178,20 +197,27 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         margin: const EdgeInsets.symmetric(horizontal: 24),
         decoration: BoxDecoration(
-          color: Colors.amber.shade50,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.amber.shade200),
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.warning.withValues(alpha: 0.15),
+              AppTheme.warning.withValues(alpha: 0.05),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppTheme.warning.withValues(alpha: 0.3),
+          ),
         ),
-        child: const Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.star_rounded, color: Colors.amber, size: 20),
-            SizedBox(width: 8),
+            Icon(Icons.star_rounded, color: AppTheme.warning, size: 20),
+            const SizedBox(width: 8),
             Text(
               'Premium — 撮影回数 無制限',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.amber,
+                color: AppTheme.warning,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -200,16 +226,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       );
     }
 
-    // 無料ユーザー
     final usedCount = AppConstants.dailyFreeLimit - _remainingScans;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       margin: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: _remainingScans > 0
-            ? AppTheme.primaryLight.withValues(alpha: 0.3)
+            ? AppTheme.primaryLight.withValues(alpha: 0.4)
             : Colors.red.shade50,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         children: [
@@ -217,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.photo_camera,
+                Icons.photo_camera_rounded,
                 color: _remainingScans > 0
                     ? AppTheme.primaryColor
                     : Colors.red,
@@ -236,7 +261,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               ),
             ],
           ),
-          // プログレスバー
           const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(4),
@@ -251,16 +275,17 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
               minHeight: 6,
             ),
           ),
-          if (_remainingScans > 0 && _remainingScans < AppConstants.dailyFreeLimit) ...[
+          if (_remainingScans > 0 &&
+              _remainingScans < AppConstants.dailyFreeLimit) ...[
             const SizedBox(height: 8),
             GestureDetector(
               onTap: () => _openPaywall(),
-              child: const Text(
-                '⭐ もっと使いたい？ → プレミアムプラン',
+              child: Text(
+                'もっと使いたい？ → プレミアムプラン',
                 style: TextStyle(
                   fontSize: 12,
-                  color: AppTheme.textSecondary,
-                  decoration: TextDecoration.underline,
+                  color: AppTheme.primaryColor,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -270,7 +295,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     );
   }
 
-  /// 撮影ボタンタップ処理
   void _handleScanTap() {
     if (_canScan) {
       _showImageSourceModal(context);
@@ -279,14 +303,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     }
   }
 
-  /// Paywall画面を開く
   Future<void> _openPaywall() async {
     final result = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (context) => const PaywallScreen()),
     );
 
-    // 購入成功時は回数情報をリフレッシュ
     if (result == true) {
       _refreshUsageInfo();
     }
@@ -296,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     showModalBottomSheet(
       context: parentContext,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (sheetContext) => SafeArea(
         child: Padding(
@@ -304,6 +326,15 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
               const Text(
                 '画像を選択',
                 style: TextStyle(
@@ -311,18 +342,38 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               ListTile(
-                leading: const Icon(Icons.camera_alt, color: AppTheme.primaryColor),
-                title: const Text('カメラで撮影'),
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryLight.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.camera_alt_rounded,
+                      color: AppTheme.primaryColor),
+                ),
+                title: const Text('カメラで撮影',
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                subtitle: const Text('身の回りのモノを撮影'),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _takePhoto(parentContext);
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.photo_library, color: AppTheme.primaryColor),
-                title: const Text('ギャラリーから選択'),
+                leading: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryLight.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.photo_library_rounded,
+                      color: AppTheme.primaryColor),
+                ),
+                title: const Text('ギャラリーから選択',
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                subtitle: const Text('保存済みの写真を使う'),
                 onTap: () {
                   Navigator.pop(sheetContext);
                   _pickFromGallery(parentContext);
@@ -345,7 +396,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (context) => ResultScreen(imagePath: image.path),
         ),
       );
-      // 結果画面から戻ったら回数をリフレッシュ
       _refreshUsageInfo();
     }
   }
@@ -360,7 +410,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           builder: (context) => ResultScreen(imagePath: image.path),
         ),
       );
-      // 結果画面から戻ったら回数をリフレッシュ
       _refreshUsageInfo();
     }
   }

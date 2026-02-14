@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-14 Day 4コード作成完了（Cowork）― CLIビルド・RevenueCat設定待ち
+# 最終更新: 2026-02-15 Day 5デザイン調整+オンボーディング完了（Claude Code CLI）― Day 6 App Store素材作成待ち
 
 ---
 
@@ -278,34 +278,37 @@ ai-director-project/
 - [x] Day 4作業ログ記録（logs/day4.md）
 - [x] CONTEXT.md / CLAUDE.md更新
 
+## ✅ 完了タスク（Day 5：デザイン調整 + オンボーディング ― Claude Code CLI実装）
+
+- [x] テーマ・カラーをティール系（#0097A7）に統一（lib/config/theme.dart 全面刷新）
+- [x] オンボーディング画面実装（lib/screens/onboarding_screen.dart 新規 ~220行）
+- [x] app.dart更新 — 初回起動判定ルーティング + スプラッシュ画面
+- [x] ホーム画面UI改善（パルスアニメーション・グラデーション・ボトムシート改善）
+- [x] フレーズカード洗練（番号バッジ・難易度アイコン・翻訳表示改善）
+- [x] MainScreen簡素化（テーマ一括管理に移行）
+- [x] アプリアイコン生成（flutter_launcher_icons で iOS/Android 全サイズ）
+- [x] スプラッシュスクリーン設定（LaunchScreen.storyboard 背景色変更）
+- [x] flutter analyze — No issues found
+- [x] flutter build ios --simulator — 成功
+- [x] Day 5作業ログ記録（logs/day5.md）
+- [x] CONTEXT.md / CLAUDE.md更新
+
 ---
 
 ## 🔜 次のアクション（優先順）
 
-### Day 4残りタスク（Claude Code CLIで実施）
-1. **ビルド確認**
-   - `flutter pub get`（新パッケージインストール）
-   - `flutter analyze`
-   - `flutter build ios --simulator`
-   - iPhoneシミュレータで動作確認
-   - Git コミット + プッシュ
+### Day 6タスク
+1. **App Store素材作成**
+   - App Storeスクリーンショット撮影（シミュレータで各画面）
+   - アプリ説明文作成
+   - キーワード設定
 
 ### 手動タスク（Yuya実施）
 2. **RevenueCat設定**（Day 4で実装したコードを動かすために必要）
-   - App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥380/月）
+   - App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥400/月）
    - RevenueCat: プロジェクト作成 + iOS設定 + APIキー取得
    - Xcode: In-App Purchaseケイパビリティ有効化
    - 利用規約・プライバシーポリシーのURL用意
-3. **見出し画像アップロード**
-   - 記事①: `assets/header_day0.png` をNoteで設定
-   - 記事②: `assets/header_day1-2.png` をNoteで設定
-   - 記事②.5: `assets/header_day2-5.png` をNoteで設定
-4. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
-5. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
-
-### 記事作業（Cowork）
-6. **記事③を完成させる**（articles/04_app_working.md をDay 4実装後に追記・仕上げ）
-7. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
 
 ### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記
