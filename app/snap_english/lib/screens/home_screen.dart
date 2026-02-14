@@ -339,7 +339,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final cameraService = CameraService();
     final image = await cameraService.takePhoto();
     if (image != null && context.mounted) {
-      final result = await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ResultScreen(imagePath: image.path),
@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     final cameraService = CameraService();
     final image = await cameraService.pickFromGallery();
     if (image != null && context.mounted) {
-      final result = await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ResultScreen(imagePath: image.path),

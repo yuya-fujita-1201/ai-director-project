@@ -78,9 +78,4 @@ class PurchaseService {
       return false;
     }
   }
-
-  /// CustomerInfo のストリーム（プレミアム状態変更を監視）
-  Stream<CustomerInfo> get customerInfoStream {
-    return Purchases.customerInfoStream;
-  }
 }
