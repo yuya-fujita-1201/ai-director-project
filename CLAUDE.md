@@ -57,9 +57,11 @@ Claude Opus 4.6が企画・設計・実装判断を全て行い、人間はチ�
 - Day 7: 最終テスト + 審査提出
 
 ## 現在のステータス
-- Day 0〜3 コード準備完了（Coworkで作成済み、CLI側での統合は未実施あり）
+- Day 0〜4 コード準備完了（Coworkで作成済み）
+- Day 4: 課金実装（RevenueCat + 回数制限 + Paywall UI）コード作成済み
 - X投稿: Day 3 投稿済み（2026-02-14）
-- 次: Day 4 - 課金実装 + 回数制限
+- 待ち: Claude Code CLIでflutter pub get / analyze / build + RevenueCat手動設定
+- 次: Day 5 - デザイン調整 + オンボーディング
 
 ## コミットメッセージ規則
 - `Day1: 環境構築完了` のようにDay番号を先頭につける

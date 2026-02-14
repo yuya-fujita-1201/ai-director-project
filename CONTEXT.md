@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-12 Day 3完了 + 記事②.5公開済み + Day 4準備完了（Cowork）
+# 最終更新: 2026-02-14 Day 4コード作成完了（Cowork）― CLIビルド・RevenueCat設定待ち
 
 ---
 
@@ -266,33 +266,46 @@ ai-director-project/
 - [x] Day 3作業ログ記録（logs/day3.md）
 - [x] CONTEXT.md更新
 
+## ✅ 完了タスク（Day 4：課金実装 + 回数制限 ― Coworkコード作成）
+
+- [x] pubspec.yaml に purchases_flutter / shared_preferences / url_launcher 追加
+- [x] PurchaseService実装（lib/services/purchase_service.dart）― RevenueCat SDK連携
+- [x] UsageService実装（lib/services/usage_service.dart）― 回数制限ロジック
+- [x] DatabaseServiceにgetTodayScanCount()追加 ― 今日のスキャン回数取得
+- [x] PaywallScreen実装（lib/screens/paywall_screen.dart）― 課金画面UI
+- [x] HomeScreen大幅更新（StatefulWidget化、残り回数表示、制限到達UI、Paywall誘導）
+- [x] main.dart更新（PurchaseService.init()追加）
+- [x] Day 4作業ログ記録（logs/day4.md）
+- [x] CONTEXT.md / CLAUDE.md更新
+
 ---
 
 ## 🔜 次のアクション（優先順）
 
-### Day 4実装（Claude Code CLIで実施）
-1. **Day 4コードの実装**（docs/day4_dev_guide.md 参照）
-   - `flutter analyze` でDay 3統合後のビルド確認
-   - RevenueCat + purchases_flutter セットアップ
-   - PurchaseService / UsageService 実装
-   - 1日3回の使用制限 + プレミアム判定
-   - 課金画面UI（Paywall）
-   - ホーム画面に残り回数表示
+### Day 4残りタスク（Claude Code CLIで実施）
+1. **ビルド確認**
+   - `flutter pub get`（新パッケージインストール）
+   - `flutter analyze`
+   - `flutter build ios --simulator`
+   - iPhoneシミュレータで動作確認
    - Git コミット + プッシュ
 
 ### 手動タスク（Yuya実施）
-2. **見出し画像アップロード**
+2. **RevenueCat設定**（Day 4で実装したコードを動かすために必要）
+   - App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥380/月）
+   - RevenueCat: プロジェクト作成 + iOS設定 + APIキー取得
+   - Xcode: In-App Purchaseケイパビリティ有効化
+   - 利用規約・プライバシーポリシーのURL用意
+3. **見出し画像アップロード**
    - 記事①: `assets/header_day0.png` をNoteで設定
    - 記事②: `assets/header_day1-2.png` をNoteで設定
    - 記事②.5: `assets/header_day2-5.png` をNoteで設定
-3. **App Store Connect**: サブスクリプション商品を作成（snap_english_monthly_380、¥380/月）
-4. **RevenueCat**: プロジェクト作成 + iOS設定 + APIキー取得
-5. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
-6. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
+4. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
+5. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
 
 ### 記事作業（Cowork）
-7. **記事③を完成させる**（articles/04_app_working.md をDay 4実装後に追記・仕上げ）
-8. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
+6. **記事③を完成させる**（articles/04_app_working.md をDay 4実装後に追記・仕上げ）
+7. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
 
 ### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記

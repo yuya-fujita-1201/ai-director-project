@@ -20,6 +20,9 @@ dependencies:
   flutter_dotenv: ^5.1.0      # 環境変数管理
   intl: ^0.19.0               # 日付フォーマット
   share_plus: ^10.1.4         # シェア機能
+  purchases_flutter: ^8.0.0    # RevenueCat課金管理
+  shared_preferences: ^2.2.2   # 軽量KV保存（使用回数）
+  url_launcher: ^6.2.4         # 外部URLオープン（利用規約等）
 
 dev_dependencies:
   flutter_test:
