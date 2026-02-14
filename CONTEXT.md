@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-12 Day 3完了 + 記事②.5公開済み + Day 4準備完了（Cowork）
+# 最終更新: 2026-02-15 Day 5デザイン調整+オンボーディング完了（Claude Code CLI）― Day 6 App Store素材作成待ち
 
 ---
 
@@ -266,33 +266,49 @@ ai-director-project/
 - [x] Day 3作業ログ記録（logs/day3.md）
 - [x] CONTEXT.md更新
 
+## ✅ 完了タスク（Day 4：課金実装 + 回数制限 ― Coworkコード作成）
+
+- [x] pubspec.yaml に purchases_flutter / shared_preferences / url_launcher 追加
+- [x] PurchaseService実装（lib/services/purchase_service.dart）― RevenueCat SDK連携
+- [x] UsageService実装（lib/services/usage_service.dart）― 回数制限ロジック
+- [x] DatabaseServiceにgetTodayScanCount()追加 ― 今日のスキャン回数取得
+- [x] PaywallScreen実装（lib/screens/paywall_screen.dart）― 課金画面UI
+- [x] HomeScreen大幅更新（StatefulWidget化、残り回数表示、制限到達UI、Paywall誘導）
+- [x] main.dart更新（PurchaseService.init()追加）
+- [x] Day 4作業ログ記録（logs/day4.md）
+- [x] CONTEXT.md / CLAUDE.md更新
+
+## ✅ 完了タスク（Day 5：デザイン調整 + オンボーディング ― Claude Code CLI実装）
+
+- [x] テーマ・カラーをティール系（#0097A7）に統一（lib/config/theme.dart 全面刷新）
+- [x] オンボーディング画面実装（lib/screens/onboarding_screen.dart 新規 ~220行）
+- [x] app.dart更新 — 初回起動判定ルーティング + スプラッシュ画面
+- [x] ホーム画面UI改善（パルスアニメーション・グラデーション・ボトムシート改善）
+- [x] フレーズカード洗練（番号バッジ・難易度アイコン・翻訳表示改善）
+- [x] MainScreen簡素化（テーマ一括管理に移行）
+- [x] アプリアイコン生成（flutter_launcher_icons で iOS/Android 全サイズ）
+- [x] スプラッシュスクリーン設定（LaunchScreen.storyboard 背景色変更）
+- [x] flutter analyze — No issues found
+- [x] flutter build ios --simulator — 成功
+- [x] Day 5作業ログ記録（logs/day5.md）
+- [x] CONTEXT.md / CLAUDE.md更新
+
 ---
 
 ## 🔜 次のアクション（優先順）
 
-### Day 4実装（Claude Code CLIで実施）
-1. **Day 4コードの実装**（docs/day4_dev_guide.md 参照）
-   - `flutter analyze` でDay 3統合後のビルド確認
-   - RevenueCat + purchases_flutter セットアップ
-   - PurchaseService / UsageService 実装
-   - 1日3回の使用制限 + プレミアム判定
-   - 課金画面UI（Paywall）
-   - ホーム画面に残り回数表示
-   - Git コミット + プッシュ
+### Day 6タスク
+1. **App Store素材作成**
+   - App Storeスクリーンショット撮影（シミュレータで各画面）
+   - アプリ説明文作成
+   - キーワード設定
 
 ### 手動タスク（Yuya実施）
-2. **見出し画像アップロード**
-   - 記事①: `assets/header_day0.png` をNoteで設定
-   - 記事②: `assets/header_day1-2.png` をNoteで設定
-   - 記事②.5: `assets/header_day2-5.png` をNoteで設定
-3. **App Store Connect**: サブスクリプション商品を作成（snap_english_monthly_380、¥380/月）
-4. **RevenueCat**: プロジェクト作成 + iOS設定 + APIキー取得
-5. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
-6. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
-
-### 記事作業（Cowork）
-7. **記事③を完成させる**（articles/04_app_working.md をDay 4実装後に追記・仕上げ）
-8. **記事③用 見出し画像を生成**（docs/header_image_template.md 参照）
+2. **RevenueCat設定**（Day 4で実装したコードを動かすために必要）
+   - App Store Connect: サブスクリプション商品作成（snap_english_monthly_380、¥400/月）
+   - RevenueCat: プロジェクト作成 + iOS設定 + APIキー取得
+   - Xcode: In-App Purchaseケイパビリティ有効化
+   - 利用規約・プライバシーポリシーのURL用意
 
 ### 後日TODO
 - [ ] 記事①にClaude会話スクショを1-2枚追記

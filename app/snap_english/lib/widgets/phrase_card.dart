@@ -19,7 +19,8 @@ class PhraseCard extends StatefulWidget {
   State<PhraseCard> createState() => _PhraseCardState();
 }
 
-class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateMixin {
+class _PhraseCardState extends State<PhraseCard>
+    with SingleTickerProviderStateMixin {
   late bool _isFavorite;
   late AnimationController _animController;
   late Animation<double> _scaleAnim;
@@ -33,9 +34,10 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
       vsync: this,
     );
     _scaleAnim = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.3), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.3, end: 1.0), weight: 50),
-    ]).animate(CurvedAnimation(parent: _animController, curve: Curves.easeInOut));
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.4), weight: 50),
+      TweenSequenceItem(tween: Tween(begin: 1.4, end: 1.0), weight: 50),
+    ]).animate(
+        CurvedAnimation(parent: _animController, curve: Curves.easeInOut));
   }
 
   @override
@@ -54,7 +56,7 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
 
   Future<void> _toggleFavorite() async {
     final phrase = widget.phrase;
-    if (phrase.id == null) return; // DB未保存のフレーズは操作不可
+    if (phrase.id == null) return;
 
     final db = DatabaseService.instance;
     final newState = await db.toggleFavorite(phrase.id!);
@@ -71,11 +73,15 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppTheme.primaryLight.withValues(alpha: 0.5),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
+            color: AppTheme.primaryColor.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -84,26 +90,47 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 上段: 難易度バッジ + お気に入りボタン
+            // 上段: 番号 + 難易度バッジ + お気に入りボタン
             Row(
               children: [
+                // フレーズ番号
+                Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${widget.index + 1}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.primaryColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
                 _buildDifficultyBadge(),
                 const Spacer(),
-                // お気に入りボタン（アニメーション付き）
                 GestureDetector(
                   onTap: _toggleFavorite,
                   child: ScaleTransition(
                     scale: _scaleAnim,
                     child: Icon(
                       _isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: _isFavorite ? Colors.red.shade400 : AppTheme.textSecondary,
+                      color: _isFavorite
+                          ? Colors.red.shade400
+                          : AppTheme.textSecondary,
                       size: 24,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             // 英語フレーズ
             Text(
               widget.phrase.english,
@@ -114,14 +141,33 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
                 height: 1.4,
               ),
             ),
-            const SizedBox(height: 6),
-            // 日本語訳
-            Text(
-              widget.phrase.japanese,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppTheme.textSecondary.withValues(alpha: 0.85),
-                height: 1.3,
+            const SizedBox(height: 8),
+            // 日本語訳（背景付き）
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppTheme.background,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.translate_rounded,
+                    size: 16,
+                    color: AppTheme.textSecondary.withValues(alpha: 0.6),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.phrase.japanese,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppTheme.textSecondary,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -132,33 +178,45 @@ class _PhraseCardState extends State<PhraseCard> with SingleTickerProviderStateM
 
   Widget _buildDifficultyBadge() {
     Color badgeColor;
+    IconData badgeIcon;
     switch (widget.phrase.difficulty) {
       case 'beginner':
-        badgeColor = const Color(0xFF4CAF50); // 緑
+        badgeColor = AppTheme.success;
+        badgeIcon = Icons.sentiment_satisfied_rounded;
         break;
       case 'intermediate':
-        badgeColor = const Color(0xFFFFC107); // 黄
+        badgeColor = AppTheme.warning;
+        badgeIcon = Icons.trending_up_rounded;
         break;
       case 'advanced':
-        badgeColor = const Color(0xFFF44336); // 赤
+        badgeColor = const Color(0xFFF44336);
+        badgeIcon = Icons.local_fire_department_rounded;
         break;
       default:
-        badgeColor = const Color(0xFF4CAF50);
+        badgeColor = AppTheme.success;
+        badgeIcon = Icons.sentiment_satisfied_rounded;
     }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: badgeColor.withValues(alpha: 0.15),
+        color: badgeColor.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(
-        widget.phrase.difficultyLabel,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-          color: badgeColor,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(badgeIcon, size: 14, color: badgeColor),
+          const SizedBox(width: 4),
+          Text(
+            widget.phrase.difficultyLabel,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: badgeColor,
+            ),
+          ),
+        ],
       ),
     );
   }

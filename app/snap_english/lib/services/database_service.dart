@@ -217,4 +217,18 @@ class DatabaseService {
     final result = await db.rawQuery('SELECT COUNT(*) as count FROM phrases WHERE is_favorite = 1');
     return result.first['count'] as int;
   }
+
+  /// 今日のスキャン回数を取得（無料制限チェック用）
+  Future<int> getTodayScanCount() async {
+    final db = await database;
+    final today = DateTime.now();
+    final startOfDay = DateTime(today.year, today.month, today.day).toIso8601String();
+    final endOfDay = DateTime(today.year, today.month, today.day, 23, 59, 59).toIso8601String();
+
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) as count FROM scan_history WHERE scanned_at BETWEEN ? AND ?',
+      [startOfDay, endOfDay],
+    );
+    return result.first['count'] as int;
+  }
 }
