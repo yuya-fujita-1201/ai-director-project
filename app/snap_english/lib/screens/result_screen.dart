@@ -130,6 +130,14 @@ class _ResultScreenState extends State<ResultScreen> {
                 child: Image.file(
                   File(widget.imagePath),
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

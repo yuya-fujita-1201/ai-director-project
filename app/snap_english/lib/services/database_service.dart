@@ -22,14 +22,33 @@ class DatabaseService {
   }
 
   Future<Database> _initDatabase() async {
-    final documentsDir = await getApplicationDocumentsDirectory();
-    final dbPath = p.join(documentsDir.path, _dbName);
+    try {
+      final documentsDir = await getApplicationDocumentsDirectory();
+      final dbPath = p.join(documentsDir.path, _dbName);
 
-    return await openDatabase(
-      dbPath,
-      version: _dbVersion,
-      onCreate: _createTables,
-    );
+      return await openDatabase(
+        dbPath,
+        version: _dbVersion,
+        onCreate: _createTables,
+      );
+    } catch (e) {
+      // DB破損時はファイルを削除して再作成を試みる
+      try {
+        final documentsDir = await getApplicationDocumentsDirectory();
+        final dbPath = p.join(documentsDir.path, _dbName);
+        final dbFile = File(dbPath);
+        if (await dbFile.exists()) {
+          await dbFile.delete();
+        }
+        return await openDatabase(
+          dbPath,
+          version: _dbVersion,
+          onCreate: _createTables,
+        );
+      } catch (_) {
+        rethrow;
+      }
+    }
   }
 
   /// テーブル作成

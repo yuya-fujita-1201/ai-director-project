@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- サービス識別子 -->
+    <key>Label</key>
+    <string>com.marumiworks.cowork-relay</string>
+
+    <!-- 起動コマンド -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/yuyafujita/Projects/ai-director-project/scripts/relay-daemon.sh</string>
+    </array>
+
+    <!-- 作業ディレクトリ -->
+    <key>WorkingDirectory</key>
+    <string>/Users/yuyafujita/Projects/cowork-codex-relay</string>
+
+    <!-- ログイン時に自動起動 -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!--
+      クラッシュ時のみ自動再起動（exit 0 では再起動しない）
+      daemon.sh 側の連続失敗5回 → sleep 300 + exit 1 と組み合わせて
+      無限ループを防止
+    -->
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <!-- 再起動間隔: 30秒（短時間連打を防止） -->
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+
+    <!-- 標準出力・エラー出力 -->
+    <key>StandardOutPath</key>
+    <string>/Users/yuyafujita/Library/Logs/cowork-codex-relay/stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/yuyafujita/Library/Logs/cowork-codex-relay/stderr.log</string>
+
+    <!-- 環境変数（PATHにhomebrew/nodeを含める） -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>/Users/yuyafujita</string>
+    </dict>
+
+    <!-- プロセスタイプ: Background（CPUスケジューラに低優先度を示す） -->
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <!-- プロセス優先度を下げる -->
+    <key>Nice</key>
+    <integer>10</integer>
+</dict>
+</plist>

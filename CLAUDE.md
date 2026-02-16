@@ -72,11 +72,55 @@ Claude Opus 4.6が企画・設計・実装判断を全て行い、人間はチ�
 - マガジン: 「AI監督プロジェクト ― 1週間アプリ開発記」作成・4記事登録済み（2026-02-15）
   - URL: https://note.com/marumi_works/m/mee0723eb1d8c
 - Skill作成: app-store-connect-browser, revenuecat-browser, note-posting-browser, note-header-upload, note-header-image-gen
-- 待ち: Claude Code CLIでflutter pub get / analyze / build
-- 待ち: Xcode In-App Purchase capability有効化 + ToS/Privacy URL用意
+- Day 6: App Store素材作成完了（2026-02-15 Cowork）
+  - App Store説明文（日本語・英語）→ docs/appstore_metadata.md
+  - キーワード設定（日本語・英語）→ docs/appstore_metadata.md
+  - プライバシーポリシー・利用規約 HTML → docs/privacy_policy.html, docs/terms_of_service.html
+  - スクリーンショットモックアップ5枚 → assets/screenshots/
+  - チェックリスト・手順書 → docs/day6_checklist.md
+- Day 7: 最終レビュー & バグ修正完了（2026-02-15 Cowork）
+  - 全Dartファイル網羅レビュー（CRITICAL 3件、HIGH 4件、MEDIUM 7件、LOW 9件検出）
+  - paywall URLをexample.com→GitHub Pages URLに修正
+  - DB初期化エラーハンドリング追加
+  - Image.file errorBuilder追加
+  - DioException全タイプカバー
+  - テストチェックリスト → docs/day7_test_checklist.md
+  - 審査提出手順書 → docs/day7_test_checklist.md
+  - Note記事⑤下書き → articles/05_final_release.md
+- 完了: Cloudflare Pages デプロイ完了（2026-02-15 Cowork）
+  - https://marumi-works.com/snapenglish/privacy
+  - https://marumi-works.com/snapenglish/terms
+  - GitHub Actions + wrangler-action で自動デプロイ設定済み
+- Day 7+: 中継サーバー（cowork-codex-relay）経由ビルド作業開始（2026-02-16 Cowork）
+  - ngrokトンネル経由でVM→Mac通信確立
+  - flutter build ios --release 成功（28.2MB）
+  - xcode_release_pipeline: Archive成功 / **Export失敗**（Distribution Provisioning Profile未作成）
+  - ios/ExportOptions.plist 作成済み（app-store-connect, teamID=5CMYP437MX）
+  - .env.example 作成済み
+- **ブロッカー解消** → ビルドパイプライン成功（2026-02-17 Cowork）
+  - Provisioning Profile作成 + In-App Purchase追加（Yuya）
+  - relay server `-allowProvisioningUpdates` パッチ（Codex）
+  - **App Store Connect アップロード成功**: v1.0.0 (1) 処理中 → 審査提出待ち
+- 自動化スクリプト作成（2026-02-17 Cowork）: scripts/relay-setup.sh, relay-start.sh, build-pipeline.sh
+- **App Store 審査提出完了**（2026-02-17 02:28 JST Cowork ブラウザ自動化）
+  - メタデータ全入力、データプライバシー設定・公開、価格$0.00、ビルド選択、iPadスクショアップロード
+  - ステータス: 「審査待ち」（最大48時間）
+- 待ち: 審査結果（メール通知）
+- 待ち: Note記事⑤投稿（Yuya手動）
 - 完了: 見出し画像 全4記事設定済み（2026-02-15）
 - 完了: マガジン見出し画像設定済み（2026-02-15 Chrome拡張経由）
-- 次: Day 6 - App Store素材作成
+- 全Day（0-7+）のCowork側タスク完了
+
+## 中継サーバー（cowork-codex-relay）
+- 場所: `/Users/yuyafujita/Projects/cowork-codex-relay/`
+- **自動起動**: macOS LaunchAgent 登録済み（Mac ログイン時に自動起動、クラッシュ時に自動再起動）
+  - 管理: `bash scripts/relay-service.sh {status|restart|stop|logs|url}`
+  - 安全装置: 連続5回失敗で停止、ログ10MBローテ、依存チェック、バックオフ
+  - ngrok URL 自動保存: `/Users/yuyafujita/Projects/cowork-codex-relay/.ngrok_url`
+- 手動起動（LaunchAgent 未設定時）: `bash scripts/relay-start.sh`
+- ngrok経由でCowork VMからアクセス（直接IP接続は不可）
+- ヘッダー: `Authorization: Bearer snap2026` + `ngrok-skip-browser-warning: true`
+- 利用可能コマンド: flutter_analyze, flutter_test, flutter_build_ios_release, xcode_archive, xcode_archive_to_ipa, xcode_release_pipeline, xcrun_upload_app
 
 ## RevenueCat & App Store Connect 設定値
 - RevenueCat テスト APIキー: `test_VKTpEiMZTHJslwzfWhhdFxkmXTf`

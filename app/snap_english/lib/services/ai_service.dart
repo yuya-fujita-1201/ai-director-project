@@ -67,13 +67,20 @@ class AiService {
         throw AiServiceException('APIキーが無効です。正しいAPIキーを設定してください。');
       } else if (e.response?.statusCode == 429) {
         throw AiServiceException('API呼び出し回数の上限に達しました。しばらく待ってから再試行してください。');
+      } else if (e.response?.statusCode == 500 || e.response?.statusCode == 503) {
+        throw AiServiceException('AIサーバーが一時的に利用できません。しばらく待ってから再試行してください。');
       } else if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
         throw AiServiceException('接続がタイムアウトしました。ネットワーク接続を確認してください。');
       } else if (e.type == DioExceptionType.connectionError) {
         throw AiServiceException('ネットワークに接続できません。インターネット接続を確認してください。');
+      } else if (e.type == DioExceptionType.badCertificate) {
+        throw AiServiceException('セキュリティ接続エラーが発生しました。ネットワーク設定を確認してください。');
+      } else if (e.type == DioExceptionType.cancel) {
+        throw AiServiceException('リクエストがキャンセルされました。');
       } else {
-        throw AiServiceException('API呼び出し中にエラーが発生しました: ${e.message}');
+        throw AiServiceException('通信エラーが発生しました。ネットワーク接続を確認してもう一度お試しください。');
       }
     } catch (e) {
       if (e is AiServiceException) rethrow;

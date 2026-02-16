@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-15 Day 5デザイン調整+オンボーディング完了（Claude Code CLI）― Day 6 App Store素材作成待ち
+# 最終更新: 2026-02-17 02:28 JST App Store 審査提出完了（Cowork ブラウザ自動化）― 審査待ち（最大48時間）
 
 ---
 
@@ -327,45 +327,93 @@ ai-director-project/
 
 ---
 
+## ✅ 完了タスク（Day 6：App Store素材作成 ― Cowork）
+
+- [x] App Store説明文 作成（日本語・英語）（2026-02-15 Cowork）→ `docs/appstore_metadata.md`
+- [x] キーワード設定（日本語10語・英語10語）→ `docs/appstore_metadata.md`
+- [x] プライバシーポリシー HTML作成 → `docs/privacy_policy.html`
+- [x] 利用規約 HTML作成 → `docs/terms_of_service.html`
+- [x] スクリーンショットモックアップ 5枚生成（1290x2796px）→ `assets/screenshots/`
+- [x] App Store Connect入力チェックリスト作成 → `docs/day6_checklist.md`
+- [x] Day 6作業ログ記録（logs/day6.md）
+- [x] CONTEXT.md / CLAUDE.md更新
+
+---
+
+## ✅ 完了タスク（Day 7+：中継サーバー経由ビルド）
+
+### 2026-02-16 Cowork
+- [x] cowork-codex-relay サーバー接続確立（ngrok経由）
+- [x] flutter build ios --release — 成功（28.2MB, 17.9秒）
+- [x] xcode_release_pipeline — Archive成功 / Export失敗（Provisioning Profile不足）
+- [x] ios/ExportOptions.plist 作成
+- [x] .env.example 作成
+
+### 2026-02-17 Yuya + Codex + Cowork
+- [x] Provisioning Profile 作成（Yuya: Xcode Release自動署名ON）
+- [x] In-App Purchase ケイパビリティ追加（Yuya: Xcode手動）
+- [x] Codex: relay server に `-allowProvisioningUpdates` パッチ適用 + ランチャー作成
+- [x] Cowork: 自動化スクリプト作成（relay-setup.sh / relay-start.sh / build-pipeline.sh）
+- [x] **ビルドパイプライン成功: Archive → Export → App Store Connect アップロード完了**
+  - v1.0.0 (1) が App Store Connect で「処理中」
+
+---
+
+## ✅ 完了タスク（Day 7+：App Store 審査提出 ― Cowork ブラウザ自動化）
+
+### 2026-02-17 Cowork（Chrome MCP自動操作）
+- [x] App Store Connect メタデータ全入力（説明文・キーワード・スクショ・年齢制限・プライバシーポリシー等）
+- [x] データプライバシー設定（写真・購入履歴）+ 公開
+- [x] 価格設定（$0.00 無料）
+- [x] コンテンツ配信権設定（いいえ）
+- [x] ビルド選択（v1.0.0 build 1）
+- [x] iPadシミュレータスクショ撮影（relay経由）+ アップロード
+- [x] **App Store 審査提出完了**（2026-02-17 02:28 JST）
+  - ステータス: 「審査待ち」（最大48時間）
+
+---
+
 ## 🔜 次のアクション（優先順）
 
-### Day 6タスク
-1. **App Store素材作成**
-   - App Storeスクリーンショット撮影（シミュレータで各画面）
-   - アプリ説明文作成
-   - キーワード設定
+1. **審査結果を待つ**（最大48時間、メール通知あり）
+2. **審査でリジェクトされた場合** → 指摘内容に対応して再提出
 
-### 手動タスク（Yuya実施）
-2. **残りの手動設定**
-   - Xcode: In-App Purchaseケイパビリティ有効化
-   - 利用規約・プライバシーポリシーのURL用意
-3. ~~**見出し画像アップロード**~~ → ✅ 全記事完了（2026-02-15）
-4. **記事②.5用スクショ撮影**（docs/screenshot_guide_article3.md 参照。後日追加）
-5. **X投稿 Day 1-3**（Draftsからスクショ添付して手動投稿）
+### 中継サーバー（自動起動済み）
 
-### 記事・マガジン作業（Cowork）
-6. ~~**記事③を完成させる**~~ → ✅ Day 4追記済み・Note投稿済み（2026-02-14 23:54）
-   - URL: https://note.com/marumi_works/n/nd865836ad26e
-7. ~~**マガジン整理**~~ → ✅ 完了（2026-02-15）
-   - 記事③を「はじめてのAIツール入門シリーズ」から削除
-   - 新マガジン「AI監督プロジェクト ― 1週間アプリ開発記」作成
-   - URL: https://note.com/marumi_works/m/mee0723eb1d8c
-   - 全4記事（Day 0, Day 1-2, Extra, Day 3-4）を登録済み
-8. ~~**見出し画像をNoteで設定**~~ → ✅ 全記事完了（2026-02-15）
-   - 記事①: `assets/header_day0.png` ✅ 設定済み（手動）
-   - 記事②: `assets/header_day1-2.png` ✅ 設定済み（手動）
-   - 記事②.5: `assets/header_day2-5.png` ✅ 設定済み（手動）
-   - 記事③: `assets/header_day3-4_v3.png` ✅ 設定済み（2026-02-15 Chrome拡張経由、v3で中央フォーカス・大テキストに改善）
-9. ~~**マガジン見出し画像を設定**~~ → ✅ 完了（2026-02-15）
-   - `assets/header_magazine.png` 生成（Pillow、1280x670px）
-   - Chrome拡張経由でアップロード・保存済み
-   - マガジン編集ページではfileInput.click()が必要（label.click()では拡張のインターセプトが効かない）
-  
+macOS LaunchAgent に登録済み。Mac ログイン時に自動起動するため、手動起動は不要。
 
-### 後日TODO
+```bash
+# Mac側: ステータス確認
+bash ~/Projects/ai-director-project/scripts/relay-service.sh status
+
+# Mac側: ngrok URL 確認
+bash ~/Projects/ai-director-project/scripts/relay-service.sh url
+
+# Mac側: 再起動が必要な場合
+bash ~/Projects/ai-director-project/scripts/relay-service.sh restart
+
+# Mac側: 初回セットアップ（未実施の場合のみ）
+bash ~/Projects/ai-director-project/scripts/relay-setup.sh <ngrokトークン>
+bash ~/Projects/ai-director-project/scripts/relay-service.sh install
+
+# Cowork側: ビルド全自動
+bash scripts/build-pipeline.sh <ngrok-url>
+```
+
+安全装置: 連続5回失敗で自動停止、ログ10MBローテ、依存チェック、バックオフ再起動。
+詳細: `.claude/skills/relay-file-transfer/` スキル参照。
+
+### その他TODO
+- [ ] Note記事⑤投稿（articles/05_final_release.md 下書き済み）
+- [ ] 記事②.5用スクショ撮影（docs/screenshot_guide_article3.md 参照）
+- [ ] X投稿 Day 1-3（Draftsからスクショ添付して手動投稿）
+- [x] X投稿 Day 6 予約投稿（2026-02-17 20:00 JST）
+- [x] X投稿 Day 7 予約投稿（2026-02-18 20:00 JST）
 - [ ] 記事①にClaude会話スクショを1-2枚追記
 - [ ] 番外編（Noteの始め方ガイド）下書き作成
 - [ ] 番外編（AIにNote投稿を自動化させてみた）※docs/article_ideas_memo.md 参照
+- [ ] App Store審査結果待ち（最大48時間 → 2/19頃まで）
+- [ ] リレーサーバー LaunchAgent 初回install（Mac側で実行）
 
 ---
 

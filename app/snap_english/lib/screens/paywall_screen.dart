@@ -244,7 +244,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () => _openUrl('https://example.com/terms'),
+                onPressed: () => _openUrl('https://marumi-works.com/snapenglish/terms'),
                 child: const Text(
                   '利用規約',
                   style: TextStyle(
@@ -262,7 +262,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () => _openUrl('https://example.com/privacy'),
+                onPressed: () => _openUrl('https://marumi-works.com/snapenglish/privacy'),
                 child: const Text(
                   'プライバシーポリシー',
                   style: TextStyle(
