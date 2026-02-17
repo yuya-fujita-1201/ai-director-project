@@ -1,5 +1,5 @@
 # AI監督プロジェクト ― コンテキスト引き継ぎドキュメント
-# 最終更新: 2026-02-17 02:28 JST App Store 審査提出完了（Cowork ブラウザ自動化）― 審査待ち（最大48時間）
+# 最終更新: 2026-02-18 夜 Cowork — SEO改善完了＋note-seo-optimizerスキル作成・審査結果待ち継続
 
 ---
 
@@ -79,9 +79,9 @@ Claude Opus 4.6に企画・設計・実装判断を全て委ね、筆者はチ�
 |---|---|---|---|
 | ① | Claude Opus 4.6がリリースされたので、全部AIに任せて1週間でiOSアプリを作ってみることにした | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/n00a946fe68da |
 | ② | ターミナルって何？からスタートして、Claudeに聞いたら2時間で開発環境ができた | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/ne17c13515413 |
-| ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **公開済み**（articles/03_tool_guide.md）スクショ後日追加予定 |
+| ②.5 | コード0行でアプリを作る「道具」の使い方 ― Claude Desktop × Cowork 実践ガイド | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/n3a6e38b5ce12 |
 | ③ | AIの指示通りに進めたら3日目にアプリが動いた。自分は何も理解していない | 無料 | ✅ **公開済み** https://note.com/marumi_works/n/nd865836ad26e |
-| ④ | App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間 | ¥500 | 未着手 |
+| ④ | App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間 | ¥500 | ✅ **公開済み** https://note.com/marumi_works/n/n20169aa6db36 |
 | ⑤ | 1週間チャレンジの全結果を公開する ― DL数・売上・Note記事の収益も | ¥980 | 未着手 |
 | 番外 | AIに聞きながらNoteアカウントを作って初投稿するまで ― 完全初心者ガイド | 無料 | 未着手 |
 
@@ -403,8 +403,22 @@ bash scripts/build-pipeline.sh <ngrok-url>
 安全装置: 連続5回失敗で自動停止、ログ10MBローテ、依存チェック、バックオフ再起動。
 詳細: `.claude/skills/relay-file-transfer/` スキル参照。
 
+### Git
+- [x] 全変更コミット（6d32471: 51ファイル +4,667行）＋ push origin main（2026-02-17 Cowork）
+- [x] ブランチ統合: claude/recursing-goldstine, claude/nervous-haibt → mainにマージ済み確認・削除完了
+- [x] mainブランチのみのクリーン状態
+
 ### その他TODO
-- [ ] Note記事⑤投稿（articles/05_final_release.md 下書き済み）
+- [ ] App Store審査結果待ち（最大48時間 → 2/19頃まで）
+- [x] Note記事④ 執筆完了 + 書き直し（2026-02-18 Cowork）→ articles/06_appstore_submission.md ¥500
+  - 書き直し: 無料=Day5-7ストーリー完結、有料=実践ガイド（プロンプト設計・ツール使い分け・スキルファイル・チェックリスト）
+  - noteエディタで本文差し替え＆有料境界移動完了（2026-02-18 Chrome MCP）
+- [x] Note記事⑤ 下書き更新（2026-02-18 Cowork）→ articles/05_final_release.md ¥980
+  - テンプレート形式、数値は審査通過・データ蓄積後に記入
+- [x] Note記事④ noteに投稿（2026-02-18 Cowork Chrome MCP）
+  - URL: https://note.com/marumi_works/n/n20169aa6db36
+  - マガジン「AI監督プロジェクト」追加済み
+- [ ] Note記事⑤ 数値記入＆投稿（審査通過・データ蓄積後）
 - [ ] 記事②.5用スクショ撮影（docs/screenshot_guide_article3.md 参照）
 - [ ] X投稿 Day 1-3（Draftsからスクショ添付して手動投稿）
 - [x] X投稿 Day 6 予約投稿（2026-02-17 20:00 JST）
@@ -412,8 +426,10 @@ bash scripts/build-pipeline.sh <ngrok-url>
 - [ ] 記事①にClaude会話スクショを1-2枚追記
 - [ ] 番外編（Noteの始め方ガイド）下書き作成
 - [ ] 番外編（AIにNote投稿を自動化させてみた）※docs/article_ideas_memo.md 参照
-- [ ] App Store審査結果待ち（最大48時間 → 2/19頃まで）
 - [ ] リレーサーバー LaunchAgent 初回install（Mac側で実行）
+- [x] SEO改善: 全5記事ハッシュタグ統一＋内部リンク追加（2026-02-18 Cowork Chrome MCP）
+  - 計画: docs/seo_improvement_plan.md / 共通3タグ＋記事別2タグ / シリーズ相互リンクブロック
+- [x] note-seo-optimizerスキル作成（2026-02-18 Cowork）→ .skills/note-seo-optimizer/SKILL.md
 
 ---
 

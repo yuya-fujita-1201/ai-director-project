@@ -71,7 +71,8 @@ Claude Opus 4.6が企画・設計・実装判断を全て行い、人間はチ�
 - Note見出し画像: 全4記事設定完了（Day 0/1-2/Extra=手動、Day 3-4=Chrome拡張経由 2026-02-15）
 - マガジン: 「AI監督プロジェクト ― 1週間アプリ開発記」作成・4記事登録済み（2026-02-15）
   - URL: https://note.com/marumi_works/m/mee0723eb1d8c
-- Skill作成: app-store-connect-browser, revenuecat-browser, note-posting-browser, note-header-upload, note-header-image-gen
+- Skill作成: app-store-connect-browser, revenuecat-browser, note-posting-browser, note-header-upload, note-header-image-gen, note-seo-optimizer
+  - 配置: `.skills/{skill-name}/SKILL.md`（二重ネスト解消済み 2026-02-18）
 - Day 6: App Store素材作成完了（2026-02-15 Cowork）
   - App Store説明文（日本語・英語）→ docs/appstore_metadata.md
   - キーワード設定（日本語・英語）→ docs/appstore_metadata.md
@@ -105,11 +106,34 @@ Claude Opus 4.6が企画・設計・実装判断を全て行い、人間はチ�
 - **App Store 審査提出完了**（2026-02-17 02:28 JST Cowork ブラウザ自動化）
   - メタデータ全入力、データプライバシー設定・公開、価格$0.00、ビルド選択、iPadスクショアップロード
   - ステータス: 「審査待ち」（最大48時間）
-- 待ち: 審査結果（メール通知）
-- 待ち: Note記事⑤投稿（Yuya手動）
-- 完了: 見出し画像 全4記事設定済み（2026-02-15）
+- Git: 全変更コミット（6d32471: 51ファイル +4,667行）＋ push origin main（2026-02-17）
+- Git: ブランチ統合完了（claude/recursing-goldstine, claude/nervous-haibt → mainマージ済み確認・削除）
+- X投稿: Day 6 予約投稿（2026-02-17 20:00）、Day 7 予約投稿（2026-02-18 20:00）
+- 待ち: 審査結果（メール通知、最大48時間 → 2/19頃まで）
+- Note記事④ 執筆完了 + 書き直し（2026-02-18 Cowork）→ articles/06_appstore_submission.md ¥500
+  - 書き直し後: 無料=Day5-7ストーリー完結（約5,500字）、有料=実践ガイド（約5,000字）
+  - 有料部分: プロンプト設計パターン3種・Cowork/CLI使い分け・プロジェクト設計・スキルファイル・AIの得意不得意・チェックリスト
+  - noteエディタで本文差し替え＆有料境界移動完了（2026-02-18 Chrome MCP）
+- Note記事⑤ 下書き更新済み（2026-02-18 Cowork）→ articles/05_final_release.md ¥980
+  - テンプレート形式、数値は審査通過・データ蓄積後に記入
+- Note記事④ noteに投稿完了（2026-02-18 Cowork Chrome MCP）
+  - URL: https://note.com/marumi_works/n/n20169aa6db36
+  - マガジン「AI監督プロジェクト」に追加済み（5記事目）
+- 待ち: Note記事⑤ 数値記入＆投稿（審査通過・データ蓄積後）
+- 完了: Note記事④ 見出し画像設定（2026-02-18 Cowork Chrome MCP）
+  - assets/header_day5-7.png（1280x670, Pillow生成、Day3-4と統一デザイン）
+- 完了: 見出し画像 全5記事設定済み（2026-02-15, 記事④は2026-02-18追加）
 - 完了: マガジン見出し画像設定済み（2026-02-15 Chrome拡張経由）
 - 全Day（0-7+）のCowork側タスク完了
+- SEO改善: 全5記事のハッシュタグ統一＋内部リンク追加完了（2026-02-18 Cowork Chrome MCP）
+  - 改善計画: docs/seo_improvement_plan.md
+  - ハッシュタグ: 共通3タグ（#AI監督プロジェクト #AIでアプリ開発 #個人開発）+ 記事別2タグに統一
+  - 内部リンク: 全記事末尾にシリーズ一覧ブロック（相互リンク＋マガジンリンク）追加
+  - ① #AI, #個人開発, #AI監督プロジェクト, #AIでアプリ開発, #iOSアプリ
+  - ② #AIでアプリ開発, #AI監督プロジェクト, #個人開発, #プログラミング初心者, #Flutter
+  - ②.5 #cowork, #AIでアプリ開発, #AI監督プロジェクト, #個人開発, #Claude
+  - ③ #Claude, #個人開発, #AI監督プロジェクト, #AIでアプリ開発, #iOSアプリ
+  - ④ #AppStore, #AIでアプリ開発, #AI監督プロジェクト, #個人開発, #Cowork
 
 ## 中継サーバー（cowork-codex-relay）
 - 場所: `/Users/yuyafujita/Projects/cowork-codex-relay/`

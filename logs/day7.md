@@ -82,7 +82,44 @@
 - [x] Archive → Export → App Store Connectアップロード（2026-02-17 Cowork パイプライン経由）
 - [x] App Store Connect でビルド処理完了を確認 → 審査提出
 - [ ] テストチェックリストに沿った動作確認
-- [ ] Note記事⑤投稿
+- [x] Note記事④ 執筆完了（2026-02-18 Cowork）→ articles/06_appstore_submission.md
+  - タイトル:「App Storeの申請まで全部AIにやらせた ― 審査提出までの72時間」
+  - 有料¥500、約10,500文字
+  - **書き直し（2026-02-18）**: 無料=Day5-7ストーリー完結、有料=実践ガイド（プロンプト設計パターン、ツール使い分け、プロジェクト設計、スキルファイル、チェックリスト）
+  - noteエディタで本文差し替え＆有料境界移動完了（2026-02-18 Cowork Chrome MCP）
+- [x] Note記事⑤ 下書き更新（2026-02-18 Cowork）→ articles/05_final_release.md
+  - タイトル:「1週間チャレンジの全結果を公開する ― DL数・売上・Note記事の収益も」
+  - 有料¥980、テンプレート形式（数値は審査通過後に記入）
+  - 構成: 審査結果→DL数→課金結果→Note収益→総収支→学び→考察
+- [x] Note記事④ noteに投稿（2026-02-18 Cowork Chrome MCP）
+  - URL: https://note.com/marumi_works/n/n20169aa6db36
+  - 有料¥500、ハッシュタグ: #AppStore #ClaudeOpus #AIでアプリ開発 #AI監督プロジェクト
+  - マガジン「AI監督プロジェクト ― 1週間アプリ開発記」に追加済み
+- [x] Note記事④ 見出し画像設定（2026-02-18 Cowork Chrome MCP）
+  - assets/header_day5-7.png（1280x670, Pillow生成 + tmpfiles.org + Chrome拡張経由アップロード）
+- [ ] Note記事⑤ 数値記入＆投稿（審査通過・データ蓄積後）
+
+---
+
+## リレーサーバー自動起動 & Git整理（2026-02-17 Cowork）
+
+### LaunchAgent自動起動
+- [x] relay-daemon.sh 作成（安全装置付きデーモンラッパー）
+- [x] com.marumiworks.cowork-relay.plist 作成（LaunchAgent定義）
+- [x] relay-service.sh 作成（管理CLI: install/start/stop/restart/status/logs/url）
+- [x] レビュー指摘4点修正（無限リスタート防止・ログローテ・依存チェック・バックオフ）
+- [x] relay-file-transfer スキルMD更新（LaunchAgent情報追記）
+- [ ] LaunchAgent初回install（Mac側: `bash scripts/relay-service.sh install`）
+
+### X投稿
+- [x] Day 6 予約投稿（2026-02-17 20:00 JST、Chrome MCP）
+- [x] Day 7 予約投稿（2026-02-18 20:00 JST、Chrome MCP）
+
+### Git
+- [x] 全変更コミット（6d32471: 51ファイル +4,667行）
+- [x] git push origin main
+- [x] ブランチ統合: claude/recursing-goldstine, claude/nervous-haibt → mainマージ済み確認・削除
+- [x] mainブランチのみのクリーン状態
 
 ---
 
